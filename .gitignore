@@ -1,4 +1,5 @@
 .idea/
+db.sqlite3
 .pytest_cache/
 
 # Byte-compiled / optimized / DLL files
