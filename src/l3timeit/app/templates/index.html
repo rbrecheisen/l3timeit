@@ -1,1 +1,9 @@
-<html>Hello, world!</html>
+<html>
+    <h1>L3 time-it</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="files">Select files:</label>
+        <input type="file" id="files" name="files" multiple/><br><br>
+        <input type="submit"/>
+    </form>
+</html>
