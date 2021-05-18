@@ -1,6 +1,8 @@
 <html>
-<h1>Upload successful!</h1>
-{% for file_name in file_names %}
-    {{ file_name }}
-{% endfor %}
+    <h1>Upload successful!</h1>
+    <ul>
+    {% for file_name in file_names %}
+        <li>{{ file_name }}</li>
+    {% endfor %}
+    </ul>
 </html>
