@@ -1,0 +1,16 @@
+<html>
+<table>
+    <tr><th>File</th><th>Status</th></tr>
+    {% for img in images %}
+        <tr>
+            {% if img.finished %}
+            <td>{{ img.file_name }}</td>
+            <td>[finished after {{ img.seconds }} seconds]</td>
+            {% else %}
+            <td><a href="/download/?file_name={{ img.file_name }}">{{ img.file_name }}</a></td>
+            <td><a href="/file_done/?file_name={{ img.file_name }}">[stop]</a></td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+</table>
+</html>

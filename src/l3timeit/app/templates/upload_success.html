@@ -1,8 +1,4 @@
 <html>
-    <h1>Upload successful!</h1>
-    <ul>
-    {% for file_name in file_names %}
-        <li>{{ file_name }}</li>
-    {% endfor %}
-    </ul>
+<h1>Successfully uploaded {{ nr_files }} files!</h1>
+<a href="/files/">View files</a>
 </html>
