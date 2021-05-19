@@ -1,4 +1,1 @@
 TODO
-
-- Store files in MEDIA_ROOT using FileSystemStorage
-- Access files via MEDIA_URL
