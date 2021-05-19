@@ -1,5 +1,8 @@
+import os
+
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.conf import settings
 from django.utils import timezone
 from django.core.files import File
 from .models import ImageModel
@@ -10,6 +13,9 @@ def upload(request):
         images = ImageModel.objects.all()
         for img in images:
             img.delete()
+        f = os.path.join(settings.MEDIA_ROOT, 'timings.txt')
+        if os.path.isfile(f):
+            os.remove(f)
         return render(request, 'upload.html')
     elif request.method == 'POST':
         files = request.FILES.getlist('files')
@@ -31,6 +37,20 @@ def download(request):
     with open(img.file_obj.path, 'rb') as f:
         response = HttpResponse(File(f), content_type='application/octet-stream')
         response['Content-Disposition'] = 'attachment; filename="{}"'.format(img.file_name)
+        return response
+
+
+def download_timings(request):
+    images = ImageModel.objects.all()
+    fp = os.path.join(settings.MEDIA_ROOT, 'timings.txt')
+    with open(fp, 'w') as f:
+        f.write('File, Seconds\n')
+        for img in images:
+            if img.seconds:
+                f.write('{}, {}\n'.format(img.file_name, img.seconds))
+    with open(fp, 'rb') as f:
+        response = HttpResponse(File(f), content_type='application/octet-stream')
+        response['Content-Disposition'] = 'attachment; filename="timings.txt"'
         return response
 
 
