@@ -13,14 +13,16 @@ def upload(request):
         return render(request, 'upload.html')
     elif request.method == 'POST':
         files = request.FILES.getlist('files')
+        images = []
         for f in files:
-            ImageModel.objects.create(file_obj=f, file_name=f.name)
-        return render(request, 'upload_success.html', context={'nr_files': len(files)})
+            img = ImageModel.objects.create(file_obj=f, file_name=f.name)
+            images.append(img)
+        return render(request, 'files.html', context={'images': images})
 
 
-def file_list(request):
+def files(request):
     images = ImageModel.objects.all()
-    return render(request, 'file_list.html', context={'images': images})
+    return render(request, 'files.html', context={'images': images})
 
 
 def download(request):
@@ -35,7 +37,7 @@ def download(request):
         return response
 
 
-def download_timings(request):
+def timings(request):
     images = ImageModel.objects.all()
     fp = os.path.join(settings.MEDIA_ROOT, 'timings.txt')
     with open(fp, 'w') as f:
@@ -49,21 +51,19 @@ def download_timings(request):
         return response
 
 
-def file_done(request):
+def finished(request):
     file_name = request.GET['file_name']
     img = ImageModel.objects.filter(file_name=file_name).first()
     img.done_at = timezone.now()
     img.seconds = int((img.done_at - img.downloaded_at).total_seconds())
     img.finished = True
     img.save()
-    return render(request, 'file_done.html', context={
-        'file_name': img.file_name,
-        'seconds': img.seconds,
-    })
+    images = ImageModel.objects.all()
+    return render(request, 'files.html', context={'images': images})
 
 
-def delete_files(request):
+def delete(request):
     images = ImageModel.objects.all()
     for img in images:
         img.delete()
-    return render(request, 'files_list.html')
+    return render(request, 'files.html')

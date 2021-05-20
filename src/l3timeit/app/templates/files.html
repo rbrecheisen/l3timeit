@@ -1,0 +1,25 @@
+<html>
+<a href="/timings/">Download timings</a><br>
+<a href="/">Back</a><br>
+<a href="/delete/">Delete files</a><br>
+<br>
+<p>ONLY CLICK [stop] AFTER YOU DOWNLOADED A FILE!!</p>
+<br>
+<table>
+    <tr><th>File</th><th>Status</th></tr>
+    {% for img in images %}
+        <tr>
+            {% if img.locked and not img.finished %}
+                <td>{{ img.file_name }}</td>
+                <td>[locked]</td>
+            {% elif img.finished %}
+                <td>{{ img.file_name }}</td>
+                <td>[finished after {{ img.seconds }} seconds]</td>
+            {% else %}
+                <td><a href="/download/?file_name={{ img.file_name }}">{{ img.file_name }}</a></td>
+                <td><a href="/finished/?file_name={{ img.file_name }}">[stop]</a></td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+</table>
+</html>

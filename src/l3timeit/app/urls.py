@@ -6,10 +6,11 @@ from . import views
 
 urlpatterns = [
     path('', views.upload),
-    path('files/', views.file_list),
+    path('files/', views.files),
     path('download/', views.download),
-    path('file-done/', views.file_done),
-    path('download-timings/', views.download_timings),
+    path('finished/', views.finished),
+    path('delete/', views.delete),
+    path('timings/', views.timings),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
