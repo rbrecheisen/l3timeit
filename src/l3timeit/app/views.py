@@ -10,12 +10,6 @@ from .models import ImageModel
 
 def upload(request):
     if request.method == 'GET':
-        images = ImageModel.objects.all()
-        for img in images:
-            img.delete()
-        f = os.path.join(settings.MEDIA_ROOT, 'timings.txt')
-        if os.path.isfile(f):
-            os.remove(f)
         return render(request, 'upload.html')
     elif request.method == 'POST':
         files = request.FILES.getlist('files')
@@ -33,6 +27,7 @@ def download(request):
     file_name = request.GET['file_name']
     img = ImageModel.objects.filter(file_name=file_name).first()
     img.downloaded_at = timezone.now()
+    img.locked = True
     img.save()
     with open(img.file_obj.path, 'rb') as f:
         response = HttpResponse(File(f), content_type='application/octet-stream')
@@ -44,10 +39,10 @@ def download_timings(request):
     images = ImageModel.objects.all()
     fp = os.path.join(settings.MEDIA_ROOT, 'timings.txt')
     with open(fp, 'w') as f:
-        f.write('File, Seconds\n')
+        f.write('File,Seconds\n')
         for img in images:
-            if img.seconds:
-                f.write('{}, {}\n'.format(img.file_name, img.seconds))
+            if img.finished:
+                f.write('{},{}\n'.format(img.file_name, img.seconds))
     with open(fp, 'rb') as f:
         response = HttpResponse(File(f), content_type='application/octet-stream')
         response['Content-Disposition'] = 'attachment; filename="timings.txt"'
@@ -65,3 +60,10 @@ def file_done(request):
         'file_name': img.file_name,
         'seconds': img.seconds,
     })
+
+
+def delete_files(request):
+    images = ImageModel.objects.all()
+    for img in images:
+        img.delete()
+    return render(request, 'files_list.html')

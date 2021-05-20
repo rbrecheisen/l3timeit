@@ -1,10 +1,14 @@
 <html>
-<a href="/download-timings/">Download timings</a>
+<a href="/download-timings/">Download timings</a><br>
+<a href="/">Back</a>
 <table>
     <tr><th>File</th><th>Status</th></tr>
     {% for img in images %}
         <tr>
-            {% if img.finished %}
+            {% if img.locked and not img.finished %}
+            <td>{{ img.file_name }}</td>
+            <td>[locked]</td>
+            {% elif img.finished %}
             <td>{{ img.file_name }}</td>
             <td>[finished after {{ img.seconds }} seconds]</td>
             {% else %}

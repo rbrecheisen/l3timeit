@@ -10,6 +10,7 @@ class ImageModel(models.Model):
     file_name = models.CharField(max_length=1024, editable=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     downloaded_at = models.DateTimeField(null=True)
+    locked = models.BooleanField(default=False)
     done_at = models.DateTimeField(null=True)
     finished = models.BooleanField(default=False)
     seconds = models.IntegerField(null=True)
